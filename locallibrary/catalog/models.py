@@ -18,6 +18,11 @@ class Book(models.Model):
     genre = models.ManyToManyField('Genre', help_text='choose a genre for this book')
     language = models.ForeignKey('Language', on_delete=models.SET_NULL, null=True, blank=True)
     
+    def display_genre(self):
+        return ', '.join([genre.name for genre in self.genre.all()[:3]])
+    
+    display_genre.short_description = 'Genre'
+    
     class Meta:
         ordering = ['title', 'author']
     
@@ -29,7 +34,7 @@ class Book(models.Model):
     
     
 class BookInstance(models.Model):
-    uniqueId = models.UUIDField(primary_key=True, default=uuid.uuid4, help_text='ID unico para este libro en toda la biblioteca')
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, help_text='ID unico para este libro en toda la biblioteca')
     due_back = models.DateField(null=True, blank=True)
     LOAN_STATUS = (
         ('m','Maintenance'),
